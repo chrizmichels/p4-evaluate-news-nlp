@@ -6,7 +6,7 @@ function handleSubmit(event) {
 
   event.preventDefault();
 
-  alert(url);
+  // alert(url);
 
   // check what text was put into the form field
   let formText = document.getElementById("name").value;
@@ -38,3 +38,4 @@ function handleSubmit(event) {
 }
 
 export { handleSubmit };
+// export default handleSubmit;
