@@ -43,6 +43,32 @@ function testAPI(event) {
       document.getElementById("results").innerHTML = apiRes;
     });
 }
+/* 
+const postData = async (url = "", data = {}) => {
+  console.log(`CALLED -> postData on URL: ${url}`);
+  console.log(`With Data Object -> `, data);
+
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    // Body data type must match "Content-Type" header
+    body: JSON.stringify(data)
+  });
+
+  try {
+    console.log(response);
+
+    const newData = await response.json();
+    console.log(newData);
+    return newData;
+  } catch (error) {
+    console.log("error", error);
+  }
+}; 
+*/
 
 export { handleSubmit, testAPI };
 // export default handleSubmit;
