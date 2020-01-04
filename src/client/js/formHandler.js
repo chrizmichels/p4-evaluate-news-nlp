@@ -43,7 +43,7 @@ function testAPI(event) {
       document.getElementById("results").innerHTML = apiRes;
     });
 }
-/* 
+
 const postData = async (url = "", data = {}) => {
   console.log(`CALLED -> postData on URL: ${url}`);
   console.log(`With Data Object -> `, data);
@@ -67,8 +67,7 @@ const postData = async (url = "", data = {}) => {
   } catch (error) {
     console.log("error", error);
   }
-}; 
-*/
+};
 
-export { handleSubmit, testAPI };
+export { handleSubmit, testAPI, postData };
 // export default handleSubmit;

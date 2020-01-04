@@ -1,7 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const aylien = require("aylien_textapi");
-//const postData = require("../client/index");
 
 // set aylien API credentias
 var textapi = new aylien({
