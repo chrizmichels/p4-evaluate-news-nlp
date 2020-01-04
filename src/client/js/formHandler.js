@@ -1,12 +1,5 @@
 function handleSubmit(event) {
-  const apiKey = `42b8991393801a8662037ddb8fbd3c5f`;
-  const unit = `metric`;
-  let url = `http://api.openweathermap.org/data/2.5/weather?zip=54578,de&units=${unit}&APPID=${apiKey}`;
-  let apiRes = ``;
-
   event.preventDefault();
-
-  // alert(url);
 
   // check what text was put into the form field
   let formText = document.getElementById("name").value;
@@ -21,6 +14,20 @@ function handleSubmit(event) {
     .then(function(data) {
       document.getElementById("results").innerHTML = data.message;
     }); */
+}
+
+function testAPI(event) {
+  const apiKey = `42b8991393801a8662037ddb8fbd3c5f`;
+  const unit = `metric`;
+  let url = `http://api.openweathermap.org/data/2.5/weather?zip=54578,de&units=${unit}&APPID=${apiKey}`;
+  let apiRes = ``;
+
+  // check what text was put into the form field
+  let formText = document.getElementById("name").value;
+
+  Client.checkForName(formText);
+
+  console.log("::: API TEST :::");
   console.log(url);
 
   fetch(url)
@@ -37,5 +44,5 @@ function handleSubmit(event) {
     });
 }
 
-export { handleSubmit };
+export { handleSubmit, testAPI };
 // export default handleSubmit;

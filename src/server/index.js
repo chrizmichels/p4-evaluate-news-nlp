@@ -1,26 +1,8 @@
-const dotenv = require("dotenv");
-dotenv.config();
-var aylien = require("aylien_textapi");
-var path = require("path");
+const path = require("path");
 const express = require("express");
-const mockAPIResponse = require("./mockAPI.js");
-
-var bodyParser = require("body-parser");
-var cors = require("cors");
-
-// set aylien API credentias
-var textapi = new aylien({
-  application_id: process.env.API_ID,
-  application_key: process.env.API_KEY
-});
-
-console.log(`Your API key is ${process.env.API_KEY}`);
-
-var json = {
-  title: "test json response",
-  message: "this is a message",
-  time: "now"
-};
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const aylienModule = require("./aylien.js");
 
 const app = express();
 app.use(cors());
@@ -35,17 +17,16 @@ app.use(
 
 app.use(express.static("dist"));
 
-console.log(JSON.stringify(mockAPIResponse));
-
 app.get("/", function(req, res) {
   res.sendFile("dist/index.html");
 });
 
 app.get("/test", function(req, res) {
-  res.json(mockAPIResponse);
+  //res.json(mockAPIResponse);
+  res.json(aylienModule.getSentiment("TEst"));
 });
 
 // designates what port the app will listen to for incoming requests
-app.listen(3030, function() {
-  console.log("Example app listening on port 3030!");
+app.listen(3031, function() {
+  console.log("Example app listening on port 3031!");
 });
