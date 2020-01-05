@@ -11,21 +11,35 @@ var textapi = new aylien({
 console.log(`Your API key is ${process.env.API_KEY}`);
 console.log(textapi);
 
-module.exports.getSentiment = function(text) {
-  console.log(text);
+const getSentiment = async function(analyseURL) {
+  console.log("URL:", analyseURL);
+  let aylienResult;
 
-  textapi.sentiment(
-    {
-      text: "John is a very good football player!"
-    },
-    function(error, response) {
-      if (error === null) {
-        console.log(response);
-        //postData("/test", response);
-      }
-      return response;
-    }
-  );
+  new Promise(function(resolve, reject) {
+    resolve(
+      textapi.sentiment(
+        {
+          url: analyseURL
+        },
+        function(error, resp) {
+          if (error === null) {
+            aylienResult = {
+              polarity: resp.polarity,
+              confidence: resp.polarity_confidence,
+              text: resp.polarity_text
+            };
+            console.log(aylienResult);
+          } else {
+            const failedText = "Something went wrong";
+            console.log(failedText);
+          }
+        }
+      )
+    );
+  });
+
+  return aylienResult;
 };
 
 // module.exports.getSentiment = getSentiment();
+module.exports.getSentiment = getSentiment;
