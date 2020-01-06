@@ -15,28 +15,24 @@ const getSentiment = async function(analyseURL) {
   console.log("URL:", analyseURL);
   let aylienResult;
 
-  new Promise(function(resolve, reject) {
-    resolve(
-      textapi.sentiment(
-        {
-          url: analyseURL
-        },
-        function(error, resp) {
-          if (error === null) {
-            aylienResult = {
-              polarity: resp.polarity,
-              confidence: resp.polarity_confidence,
-              text: resp.polarity_text
-            };
-            console.log(aylienResult);
-          } else {
-            const failedText = "Something went wrong";
-            console.log(failedText);
-          }
-        }
-      )
-    );
-  });
+  textapi.sentiment(
+    {
+      url: analyseURL
+    },
+    function(error, resp) {
+      if (error === null) {
+        aylienResult = {
+          polarity: resp.polarity,
+          confidence: resp.polarity_confidence,
+          text: resp.polarity_text
+        };
+        console.log(aylienResult);
+      } else {
+        const failedText = "Something went wrong";
+        console.log(failedText);
+      }
+    }
+  );
 
   return aylienResult;
 };

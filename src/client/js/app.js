@@ -11,7 +11,8 @@ el.addEventListener("click", getStarted); */
 function getStarted(event) {
   event.preventDefault();
 
-  console.log("Submit Button Clicked");
+  console.log("::::: Submit Button Clicked :::::");
+  //Get URL from UI
   let url = document.getElementById("name").value;
 
   //data.push(url);
@@ -19,38 +20,7 @@ function getStarted(event) {
   projectData = {};
   projectData = { url: url };
   console.log("Call postData", projectData);
-
-  /* postData("/all", projectData)
-    .then(() => {
-      getProjectData("/getSentiment");
-    })
-    .then(updateUI()); */
-
-  postData("/all", projectData).then(data => updateUI());
-
-  // document.getElementById("results").innerHTML = "TEst";
-  //const response = await fetch(url, {
-  /*    method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    // Body data type must match "Content-Type" header
-    body: JSON.stringify(data)
-  });
-  console.log("fetch getProjectData", response); */
-
-  /*   getWeatherData(unit, apiKey)
-    .then(function(data) {
-      console.log("postDatat to /all endpoint ->", data);
-      postData("/all", {
-        Location: data.name,
-        Date: newDate,
-        Temp: data.main.temp,
-        Content: feelingUI
-      });
-    })
-    .then(data => updateUI()); */
+  postData("/getSentiment", projectData).then(updateUI());
 }
 
 /* Function to POST data */
@@ -96,13 +66,13 @@ const getProjectData = async url => {
 
 //Update UI
 const updateUI = async () => {
-  console.log(`CALL -> Update UI`);
-
-  const request = await fetch("/getSentiment");
-
   try {
+    console.log(`CALL -> Update UI`);
+
+    const request = await fetch("/getSentiment");
     const allData = await request.json();
     console.log("updateUI -> ", allData);
+
     document.getElementById("pol").innerHTML = `Polarity: ${allData.polarity}`;
     document.getElementById(
       "conf"

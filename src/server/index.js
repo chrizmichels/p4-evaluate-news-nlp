@@ -13,7 +13,7 @@ dotenv.config();
 const aylien = require("aylien_textapi");
 
 // set aylien API credentias
-let aylienResult;
+let aylienResult = {};
 var textapi = new aylien({
   application_id: process.env.API_ID,
   application_key: process.env.API_KEY
@@ -29,6 +29,7 @@ Aylien Setup End
 let projectData = {};
 let data = [];
 
+//Setup Express Server
 const app = express();
 app.use(cors());
 // to use json
@@ -40,16 +41,11 @@ app.use(
   })
 );
 
+//Set directory for production
 app.use(express.static("dist"));
 
 app.get("/", function(req, res) {
   res.sendFile("dist/index.html");
-});
-
-app.get("/test", function(req, res) {
-  //res.json(mockAPIResponse);
-  console.log("TEST Endpoint GET");
-  projectData = res.json(aylienModule.getSentiment("TEst"));
 });
 
 // designates what port the app will listen to for incoming requests
@@ -58,31 +54,23 @@ app.listen(3031, function() {
 });
 
 // Post Route
-app.post("/all", (req, res) => {
-  console.log("LOG: POST received");
+app.post("/getSentiment", async (req, res) => {
   data = [];
   data.push(req.body);
-  console.log(data.length);
-
-  // projectData = req.body;
-
-  /*   projectData["Location"] = req.body.Location;
-  projectData["Date"] = req.body.Date;
-  projectData["Temp"] = req.body.Temp;
-  projectData["Content"] = req.body.Content; */
+  console.log("LOG: POST received", data.length);
 
   try {
-    console.log("/getSentiment Endpoint -> Server side GET", data);
-    // console.log("/getSentiment Endpoint -> Server side GET", req);
-
-    // console.log("Project Data", projectData);
-    // res.send(projectData);
-
-    //let aylienReturn = await aylienModule.getSentiment(data[0].url);
     let analyseURL = data[0].url;
-    new Promise(function(resolve, reject) {
-      resolve((aylienResult = getSentiment(analyseURL)));
-    }).then(function(aylienResult) {
+    console.log(
+      "/getSentiment Endpoint -> Server side POST - Call getSentoment with:",
+      analyseURL
+    );
+
+    await getSentiment(analyseURL).then(function(aylienResult) {
+      console.log(
+        "/getSentiment Endpoint -> Server side POST -> aylienResult",
+        aylienResult
+      );
       res.send(aylienResult);
     });
 
@@ -90,25 +78,15 @@ app.post("/all", (req, res) => {
 
     // res.send(aylienResult);
   } catch (error) {
-    console.log(error);
+    console.log("ERROR in SERVER SIDE POST /getSentiment Endpoint", error);
   }
 
-  console.log("Server Post Route - data: ", data);
-  console.log("Server Post Route - ProjectData: ", projectData);
-});
-
-// Callback function to complete GET '/all'
-app.get("/all", (req, res) => {
-  console.log("Server side GET");
-  // console.log("Project Data", projectData);
-  // res.send(projectData);
-  console.log(data);
-
-  res.send(data);
+  // console.log("Server Post Route - data: ", data);
+  // console.log("Server Post Route - ProjectData: ", projectData);
 });
 
 // Callback function to complete GET '/getSentiment'
-app.get("/getSentiment", (req, res) => {
+app.get("/getSentiment", async (req, res) => {
   try {
     console.log("/getSentiment Endpoint -> Server side GET", data);
     // console.log("/getSentiment Endpoint -> Server side GET", req);
@@ -117,42 +95,47 @@ app.get("/getSentiment", (req, res) => {
     // res.send(projectData);
 
     //let aylienReturn = await aylienModule.getSentiment(data[0].url);
-    let analyseURL = data[0].url;
-    new Promise(function(resolve, reject) {
-      resolve((aylienResult = getSentiment(analyseURL)));
-    }).then(function(aylienResult) {
+    /*     let analyseURL = data[0].url;
+    aylienResult = await getSentiment(analyseURL).then(function(aylienResult) {
+      console.log(
+        "/getSentiment Endpoint -> Server side GET -> aylienResult",
+        aylienResult
+      );
       res.send(aylienResult);
-    });
+    }); */
 
     // aylienResult = getSentiment(analyseURL);
-
-    // res.send(aylienResult);
+    console.log(
+      "/getSentiment Endpoint -> Server side GET -> aylienResult",
+      aylienResult
+    );
+    res.send(aylienResult);
   } catch (error) {
-    console.log(error);
+    console.log("ERROR in SERVER SIDE GET /getSentiment Endpoint", error);
   }
 });
 
 const getSentiment = async function(analyseURL) {
-  textapi.sentiment(
-    {
-      url: analyseURL
-    },
-    function(error, resp) {
-      if (error === null) {
-        aylienResult = {
-          polarity: resp.polarity,
-          confidence: resp.polarity_confidence
-        };
-        console.log(aylienResult);
-      } else {
-        const failedText = "Something went wrong";
-        console.log(failedText);
+  await textapi
+    .sentiment(
+      {
+        url: analyseURL
+      },
+      function(error, resp) {
+        if (error === null) {
+          aylienResult = {
+            polarity: resp.polarity,
+            confidence: resp.polarity_confidence
+          };
+          console.log("Server Side getSentiment result:", aylienResult);
+        } else {
+          const failedText = "Something went wrong";
+          console.log(failedText);
+        }
       }
-    }
-  );
-
-  // console.log("AylienReturn: ", aylienResult);
-  // res.json(projectData);
-  // res.send(aylienResult);
-  return aylienResult;
+    )
+    .then(aylienResult => {
+      console.log("Server Side getSentiment result RETURN:", aylienResult);
+      return aylienResult;
+    });
 };
