@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler");
 //Setup Logging
 const log4js = require("log4js");
 const logger = log4js.getLogger();
-logger.level = "debug";
+logger.level = "None";
 
 /* 
 Aylien Setup Start

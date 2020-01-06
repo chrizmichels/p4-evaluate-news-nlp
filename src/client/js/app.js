@@ -38,20 +38,20 @@ const getStarted = async event => {
 
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
-  log.debug(`CALLED -> postData on URL: ${url}`);
-  log.debug(`With Data Object -> `, data);
-
-  const response = await fetch(url, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    // Body data type must match "Content-Type" header
-    body: JSON.stringify(data)
-  });
-
   try {
+    log.debug(`CALLED -> postData on URL: ${url}`);
+    log.debug(`With Data Object -> `, data);
+
+    const response = await fetch(url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      // Body data type must match "Content-Type" header
+      body: JSON.stringify(data)
+    });
+
     const newData = await response.json();
     log.debug("CLIENT -> POST Data Route RESPONSE", newData);
     return newData;
@@ -81,4 +81,13 @@ const updateUI = async data => {
   }
 };
 
-export { getStarted, postData, updateUI };
+const plg = data => {
+  return {
+    polarity: "resp.polarity",
+    confidence: "resp.polarity_confidence",
+    text: "resp.text",
+    url: "analyseURL"
+  };
+};
+
+export { getStarted, postData, updateUI, plg };
