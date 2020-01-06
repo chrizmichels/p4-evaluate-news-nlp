@@ -3,6 +3,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const asyncHandler = require("express-async-handler");
+//Setup Logging
+const log4js = require("log4js");
+const logger = log4js.getLogger();
+logger.level = "debug";
 
 /* 
 Aylien Setup Start
@@ -18,8 +22,8 @@ var textapi = new aylien({
   application_key: process.env.API_KEY
 });
 
-console.log(`Your API key is ${process.env.API_KEY}`);
-console.log(textapi);
+logger.debug(`Your API key is ${process.env.API_KEY}`);
+logger.debug(textapi);
 /*  
 Aylien Setup End
 */
@@ -49,18 +53,18 @@ app.get("/", function(req, res) {
 
 // designates what port the app will listen to for incoming requests
 app.listen(3031, function() {
-  console.log("Example app listening on port 3031!");
+  logger.debug("Example app listening on port 3031!");
 });
 
 // Post Route
 app.post("/getSentiment", async (req, res) => {
   data = [];
   data.push(req.body);
-  console.log("LOG: POST received", data.length);
+  logger.debug("LOG: POST received", data.length);
 
   try {
     let analyseURL = data[0].url;
-    console.log(
+    logger.debug(
       "/getSentiment Endpoint -> Server side POST - Call getSentiment with:",
       analyseURL
     );
@@ -81,13 +85,13 @@ app.post("/getSentiment", async (req, res) => {
           });
         } else {
           const failedText = "Something went wrong";
-          console.log(failedText);
+          logger.debug(failedText);
         }
       }
     );
 
     // res.send(aylienResult);
   } catch (error) {
-    console.log("ERROR in SERVER SIDE POST /getSentiment Endpoint", error);
+    logger.debug("ERROR in SERVER SIDE POST /getSentiment Endpoint", error);
   }
 });
