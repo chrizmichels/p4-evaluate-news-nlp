@@ -23,6 +23,7 @@ var textapi = new aylien({
   application_key: process.env.API_KEY
 });
 
+//Check if API Keys are readable
 logger.debug(`Your API key is ${process.env.API_KEY}`);
 logger.debug(textapi);
 /*  

@@ -1,5 +1,6 @@
 /* Imports */
 import ulog from "ulog";
+import { isUrlValid } from "./helper";
 
 /* Global Variables */
 let data = [];
@@ -15,26 +16,35 @@ const getStarted = async event => {
   try {
     event.preventDefault();
 
-    log.debug("::::: Submit Button Clicked :::::");
+    log.debug("::::: Get Results Clicked :::::");
     //Get URL from UI
     let url = document.getElementById("name").value;
 
-    //data.push(url);
-    // console.log(url);
-    projectData = {};
-    projectData = { url: url };
-    log.debug("Call postData", projectData);
+    if (isUrlValid(url)) {
+      //data.push(url);
+      // console.log(url);
+      projectData = {};
+      projectData = { url: url };
+      log.debug("Call postData", projectData);
 
-    //Send URL to /getSentiment Server enpoint
-    //Return will be an json Object
-    const data = await postData("/getSentiment", projectData);
+      //Send URL to /getSentiment Server enpoint
+      //Return will be an json Object
+      const data = await postData("/getSentiment", projectData);
 
-    //Update UI with result from server response
-    updateUI(data);
+      //Update UI with result from server response
+      updateUI(data);
+    } else {
+      alert("Please enter a valid URL");
+    }
   } catch (err) {
     log.debug("ERROR in Client Side - getStarted", error);
   }
 };
+
+// Event listener to add function to existing HTML DOM element
+const el = document.getElementById("generate");
+log.debug(`Add Event Listener to -> `, el);
+el.addEventListener("click", getStarted);
 
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
@@ -81,13 +91,4 @@ const updateUI = async data => {
   }
 };
 
-const plg = data => {
-  return {
-    polarity: "resp.polarity",
-    confidence: "resp.polarity_confidence",
-    text: "resp.text",
-    url: "analyseURL"
-  };
-};
-
-export { getStarted, postData, updateUI, plg };
+export { getStarted, postData, updateUI };
