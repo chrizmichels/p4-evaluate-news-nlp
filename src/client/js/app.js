@@ -19,6 +19,8 @@ const getStarted = async event => {
   //Send URL to /getSentiment Server enpoint
   //Return will be an json Object
   const data = await postData("/getSentiment", projectData);
+
+  //Update UI with result from server response
   updateUI(data);
 };
 
@@ -61,9 +63,10 @@ const updateUI = async data => {
     document.getElementById(
       "conf"
     ).innerHTML = `Confidence: ${allData.confidence}`;
+    document.getElementById("restxt").innerHTML = `TEXT: ${allData.text}`;
   } catch (error) {
     console.log("ERROR in Client Side updateUI", error);
   }
 };
 
-export { getStarted };
+export { getStarted, postData, updateUI };

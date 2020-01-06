@@ -71,9 +71,12 @@ app.post("/getSentiment", async (req, res) => {
       },
       function(error, resp) {
         if (error === null) {
+          // console.log(resp);
+
           res.json({
             polarity: resp.polarity,
             confidence: resp.polarity_confidence,
+            text: resp.text,
             url: analyseURL
           });
         } else {
