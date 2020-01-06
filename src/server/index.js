@@ -6,7 +6,8 @@ const asyncHandler = require("express-async-handler");
 //Setup Logging
 const log4js = require("log4js");
 const logger = log4js.getLogger();
-logger.level = "None";
+// logger.level = "None";
+logger.level = "debug";
 
 /* 
 Aylien Setup Start
@@ -51,9 +52,12 @@ app.get("/", function(req, res) {
   res.sendFile("dist/index.html");
 });
 
+let port = 8000;
+// let port = 3030;
+
 // designates what port the app will listen to for incoming requests
-app.listen(3031, function() {
-  logger.debug("Example app listening on port 3031!");
+app.listen(port, function() {
+  logger.debug(`Example app listening on port ${port}!`);
 });
 
 // Post Route

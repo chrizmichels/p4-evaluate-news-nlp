@@ -33,27 +33,11 @@ describe("Playground Function", () => {
 
 //Post Route Testcases
 describe("postData Route Test", () => {
-  it("Calling getSentiment Enpoint should return JSON Object matching specific structure", done => {
-    // expect.assertions();
+  it("Calling getSentiment Enpoint should return JSON Object matching specific structure", async () => {
+    expect.assertions();
     try {
-      const mockSuccessResponse = {
-        url: "Text",
-        polarity: "Text",
-        confidence: "Text",
-        text: "Text"
-      };
-      const mockJsonPromise = Promise.resolve(mockSuccessResponse); // 2
-      const mockFetchPromise = Promise.resolve({
-        // 3
-        json: () => mockJsonPromise
-      });
-      jest.spyOn(global, "fetch").mockImplementation(() => mockFetchPromise); // 4
-
-      expect(global.fetch).toHaveBeenCalledTimes(1);
-      expect(global.fetch).toHaveBeenCalledWith("/getSentiment");
-
       let projectData = { url: "https://www.npmjs.com/package/ulog" };
-      let data = postData("/getSentiment", projectData);
+      let data = await postData("/getSentiment", projectData);
       console.log(data);
 
       expect(data).toMatchObject({
@@ -62,9 +46,6 @@ describe("postData Route Test", () => {
         confidence: expect.any(String),
         text: expect.any(String)
       });
-
-      global.fetch.mockClear(); // 7
-      done(); // 8
     } catch (err) {
       console.log(err);
     }
