@@ -16,14 +16,17 @@ function getStarted(event) {
 
   //data.push(url);
   // console.log(url);
+  projectData = {};
   projectData = { url: url };
   console.log("Call postData", projectData);
 
-  postData("/all", projectData)
+  /* postData("/all", projectData)
     .then(() => {
       getProjectData("/getSentiment");
     })
-    .then(updateUI());
+    .then(updateUI()); */
+
+  postData("/all", projectData).then(data => updateUI());
 
   // document.getElementById("results").innerHTML = "TEst";
   //const response = await fetch(url, {

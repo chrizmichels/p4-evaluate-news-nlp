@@ -60,6 +60,7 @@ app.listen(3031, function() {
 // Post Route
 app.post("/all", (req, res) => {
   console.log("LOG: POST received");
+  data = [];
   data.push(req.body);
   console.log(data.length);
 
@@ -69,6 +70,28 @@ app.post("/all", (req, res) => {
   projectData["Date"] = req.body.Date;
   projectData["Temp"] = req.body.Temp;
   projectData["Content"] = req.body.Content; */
+
+  try {
+    console.log("/getSentiment Endpoint -> Server side GET", data);
+    // console.log("/getSentiment Endpoint -> Server side GET", req);
+
+    // console.log("Project Data", projectData);
+    // res.send(projectData);
+
+    //let aylienReturn = await aylienModule.getSentiment(data[0].url);
+    let analyseURL = data[0].url;
+    new Promise(function(resolve, reject) {
+      resolve((aylienResult = getSentiment(analyseURL)));
+    }).then(function(aylienResult) {
+      res.send(aylienResult);
+    });
+
+    // aylienResult = getSentiment(analyseURL);
+
+    // res.send(aylienResult);
+  } catch (error) {
+    console.log(error);
+  }
 
   console.log("Server Post Route - data: ", data);
   console.log("Server Post Route - ProjectData: ", projectData);
@@ -100,6 +123,10 @@ app.get("/getSentiment", (req, res) => {
     }).then(function(aylienResult) {
       res.send(aylienResult);
     });
+
+    // aylienResult = getSentiment(analyseURL);
+
+    // res.send(aylienResult);
   } catch (error) {
     console.log(error);
   }
@@ -114,8 +141,7 @@ const getSentiment = async function(analyseURL) {
       if (error === null) {
         aylienResult = {
           polarity: resp.polarity,
-          confidence: resp.polarity_confidence,
-          text: resp.polarity_text
+          confidence: resp.polarity_confidence
         };
         console.log(aylienResult);
       } else {
