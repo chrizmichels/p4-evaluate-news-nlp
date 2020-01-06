@@ -2,7 +2,6 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const aylienModule = require("./aylien");
 const asyncHandler = require("express-async-handler");
 
 /* 
@@ -62,80 +61,30 @@ app.post("/getSentiment", async (req, res) => {
   try {
     let analyseURL = data[0].url;
     console.log(
-      "/getSentiment Endpoint -> Server side POST - Call getSentoment with:",
+      "/getSentiment Endpoint -> Server side POST - Call getSentiment with:",
       analyseURL
     );
 
-    await getSentiment(analyseURL).then(function(aylienResult) {
-      console.log(
-        "/getSentiment Endpoint -> Server side POST -> aylienResult",
-        aylienResult
-      );
-      res.send(aylienResult);
-    });
-
-    // aylienResult = getSentiment(analyseURL);
-
-    // res.send(aylienResult);
-  } catch (error) {
-    console.log("ERROR in SERVER SIDE POST /getSentiment Endpoint", error);
-  }
-
-  // console.log("Server Post Route - data: ", data);
-  // console.log("Server Post Route - ProjectData: ", projectData);
-});
-
-// Callback function to complete GET '/getSentiment'
-app.get("/getSentiment", async (req, res) => {
-  try {
-    console.log("/getSentiment Endpoint -> Server side GET", data);
-    // console.log("/getSentiment Endpoint -> Server side GET", req);
-
-    // console.log("Project Data", projectData);
-    // res.send(projectData);
-
-    //let aylienReturn = await aylienModule.getSentiment(data[0].url);
-    /*     let analyseURL = data[0].url;
-    aylienResult = await getSentiment(analyseURL).then(function(aylienResult) {
-      console.log(
-        "/getSentiment Endpoint -> Server side GET -> aylienResult",
-        aylienResult
-      );
-      res.send(aylienResult);
-    }); */
-
-    // aylienResult = getSentiment(analyseURL);
-    console.log(
-      "/getSentiment Endpoint -> Server side GET -> aylienResult",
-      aylienResult
-    );
-    res.send(aylienResult);
-  } catch (error) {
-    console.log("ERROR in SERVER SIDE GET /getSentiment Endpoint", error);
-  }
-});
-
-const getSentiment = async function(analyseURL) {
-  await textapi
-    .sentiment(
+    textapi.sentiment(
       {
         url: analyseURL
       },
       function(error, resp) {
         if (error === null) {
-          aylienResult = {
+          res.json({
             polarity: resp.polarity,
-            confidence: resp.polarity_confidence
-          };
-          console.log("Server Side getSentiment result:", aylienResult);
+            confidence: resp.polarity_confidence,
+            url: analyseURL
+          });
         } else {
           const failedText = "Something went wrong";
           console.log(failedText);
         }
       }
-    )
-    .then(aylienResult => {
-      console.log("Server Side getSentiment result RETURN:", aylienResult);
-      return aylienResult;
-    });
-};
+    );
+
+    // res.send(aylienResult);
+  } catch (error) {
+    console.log("ERROR in SERVER SIDE POST /getSentiment Endpoint", error);
+  }
+});

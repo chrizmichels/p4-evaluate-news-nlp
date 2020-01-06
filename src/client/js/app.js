@@ -2,13 +2,8 @@
 let data = [];
 let projectData = {};
 
-// Event listener to add function to existing HTML DOM element
-/* const el = document.getElementById("btnSubmit");
-console.log(`Add Event Listener to -> `, el);
-el.addEventListener("click", getStarted); */
-
 /* Function called by event listener */
-function getStarted(event) {
+const getStarted = async event => {
   event.preventDefault();
 
   console.log("::::: Submit Button Clicked :::::");
@@ -20,8 +15,12 @@ function getStarted(event) {
   projectData = {};
   projectData = { url: url };
   console.log("Call postData", projectData);
-  postData("/getSentiment", projectData).then(updateUI());
-}
+
+  //Send URL to /getSentiment Server enpoint
+  //Return will be an json Object
+  const data = await postData("/getSentiment", projectData);
+  updateUI(data);
+};
 
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
@@ -39,40 +38,25 @@ const postData = async (url = "", data = {}) => {
   });
 
   try {
-    console.log(response);
-
     const newData = await response.json();
-    console.log(newData);
+    console.log("CLIENT -> POST Data Route RESPONSE", newData);
     return newData;
   } catch (error) {
     console.log("ERROR in Client Side postData", error);
   }
 };
 
-/* Function to GET Project Data */
-const getProjectData = async url => {
-  console.log(`CALLED -> getProjectData on URL: ${url}`);
-  const res = await fetch(url);
-  try {
-    const data = await res.json();
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    console.log("ERROR in Client Side getProjectData", error);
-    // appropriately handle the error
-  }
-};
-
 //Update UI
-const updateUI = async () => {
+const updateUI = async data => {
   try {
-    console.log(`CALL -> Update UI`);
+    console.log(`CALL -> Update UI with data Object`, data);
 
-    const request = await fetch("/getSentiment");
-    const allData = await request.json();
+    /*   const request = await fetch("/getSentiment");
+    const allData = await request.json(); */
+    const allData = data;
+
     console.log("updateUI -> ", allData);
-
+    document.getElementById("url").innerHTML = `URL: ${allData.url}`;
     document.getElementById("pol").innerHTML = `Polarity: ${allData.polarity}`;
     document.getElementById(
       "conf"
