@@ -1,6 +1,6 @@
-import { plg } from "./helper";
+import { plg, isUrlValid } from "./helper";
 
-describe("Playground Function", () => {
+describe("Helper function Testst", () => {
   test("Input is Equal to Output", () => {
     let input = {
       url: expect.any(String),
@@ -9,5 +9,10 @@ describe("Playground Function", () => {
       text: expect.any(String)
     };
     expect(plg(input)).toEqual(input);
+  });
+
+  test("Input is a URL", () => {
+    let input = "https://www.4arge.com/";
+    expect(isUrlValid(input)).toBeTrue;
   });
 });
