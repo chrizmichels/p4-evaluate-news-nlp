@@ -12,6 +12,9 @@ module.exports = {
   },
   mode: "development",
   devtool: "source-map",
+  devServer: {
+    contentBase: path.join(__dirname, "dist")
+  },
   module: {
     rules: [
       {
