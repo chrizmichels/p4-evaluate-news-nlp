@@ -13,7 +13,16 @@ module.exports = {
   mode: "development",
   devtool: "source-map",
   devServer: {
-    contentBase: path.join(__dirname, "dist")
+    historyApiFallback: true,
+    contentBase: "./dist",
+    host: "localhost", // Defaults to `localhost`
+    port: 3000, // Defaults to 8080
+    proxy: {
+      "/getSentiment": {
+        target: "http://localhost:8000",
+        secure: false
+      }
+    }
   },
   module: {
     rules: [
@@ -41,6 +50,14 @@ module.exports = {
       // Automatically remove all unused webpack assets on rebuild
       cleanStaleWebpackAssets: true,
       protectWebpackAssets: false
+    }),
+
+    new webpack.HotModuleReplacementPlugin({
+      multiStep: true
     })
   ]
 };
+
+/* devServer: {
+  contentBase: path.join(__dirname, "dist")
+}, */

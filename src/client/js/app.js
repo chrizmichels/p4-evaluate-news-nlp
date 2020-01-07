@@ -66,7 +66,7 @@ const postData = async (url = "", data = {}) => {
       method: "POST",
       credentials: "same-origin",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json" //"Content-Type"
       },
       // Body data type must match "Content-Type" header
       body: JSON.stringify(data)
