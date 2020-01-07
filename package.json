@@ -13,7 +13,7 @@
     "start": "node src/server/index.js",
     "build-prod": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "build-dev-server": "webpack-dev-server  --config webpack.dev.js --open"
+    "build-dev-srv": "webpack-dev-server  --config webpack.dev.js --open"
   },
   "keywords": [],
   "author": "",

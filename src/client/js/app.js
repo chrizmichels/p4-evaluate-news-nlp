@@ -20,6 +20,8 @@ const getStarted = async event => {
     //Get URL from UI
     let url = document.getElementById("name").value;
 
+    log.debug("Get URL from UI: ", url);
+
     if (isUrlValid(url)) {
       //data.push(url);
       // console.log(url);
@@ -30,6 +32,8 @@ const getStarted = async event => {
       //Send URL to /getSentiment Server enpoint
       //Return will be an json Object
       const data = await postData("/getSentiment", projectData);
+
+      log.debug("Data returned from postDAta Call:", data);
 
       //Update UI with result from server response
       updateUI(data);
