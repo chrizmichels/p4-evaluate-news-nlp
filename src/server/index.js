@@ -4,9 +4,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const asyncHandler = require("express-async-handler");
 //Setup Logging
-const log4js = require("log4js");
-const logger = log4js.getLogger();
-// logger.level = "None";
+const getLogger = require("webpack-log");
+const logger = getLogger({ name: "wbpck-yoda", timestamp: true });
+
+//Switch Log Level
+// logger.level = "silent";
 logger.level = "debug";
 
 /* 
@@ -24,8 +26,8 @@ var textapi = new aylien({
 });
 
 //Check if API Keys are readable
-logger.debug(`Your API key is ${process.env.API_KEY}`);
-logger.debug(textapi);
+logger.debug(`Server/index.js -> Your API key is ${process.env.API_KEY}`);
+logger.debug(`Server/index.js -> Aylien Text Api Object: `, textapi);
 /*  
 Aylien Setup End
 */
@@ -58,14 +60,14 @@ let port = 8000;
 
 // designates what port the app will listen to for incoming requests
 app.listen(port, function() {
-  logger.debug(`Example app listening on port ${port}!`);
+  logger.debug(`Server/index.js -> Example app listening on port ${port}!`);
 });
 
 // Post Route
 app.post("/getSentiment", async (req, res) => {
   data = [];
   data.push(req.body);
-  logger.debug("LOG: POST received", data.length);
+  logger.debug("/getSentiment Endpoint -> POST received with: ", data);
 
   try {
     let analyseURL = data[0].url;
@@ -81,7 +83,7 @@ app.post("/getSentiment", async (req, res) => {
       function(error, resp) {
         if (error === null) {
           // console.log(resp);
-
+          logger.debug("/getSentiment Endpoint -> Aylien Response: ", resp);
           res.json({
             polarity: resp.polarity,
             confidence: resp.polarity_confidence,
@@ -89,7 +91,8 @@ app.post("/getSentiment", async (req, res) => {
             url: analyseURL
           });
         } else {
-          const failedText = "Something went wrong";
+          const failedText =
+            "/getSentiment Endpoint -> Something went wrong fetching result from Aylien";
           logger.debug(failedText);
         }
       }
@@ -97,6 +100,6 @@ app.post("/getSentiment", async (req, res) => {
 
     // res.send(aylienResult);
   } catch (error) {
-    logger.debug("ERROR in SERVER SIDE POST /getSentiment Endpoint", error);
+    logger.debug("/getSentiment Endpoint -> ERROR in SERVER SIDE POST", error);
   }
 });

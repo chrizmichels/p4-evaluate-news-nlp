@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const log4js = require("log4js");
-const ulog = require("ulog");
 //const WorkboxPlugin = require("workbox-webpack-plugin");
 
 module.exports = {

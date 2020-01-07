@@ -16,24 +16,27 @@ const getStarted = async event => {
   try {
     event.preventDefault();
 
-    log.debug("::::: Get Results Clicked :::::");
+    log.debug("Client/app.js/getStarted -> ::::: Get Results Clicked :::::");
     //Get URL from UI
     let url = document.getElementById("name").value;
 
-    log.debug("Get URL from UI: ", url);
+    log.debug("Client/app.js/getStarted -> Get URL from UI: ", url);
 
     if (isUrlValid(url)) {
       //data.push(url);
       // console.log(url);
       projectData = {};
       projectData = { url: url };
-      log.debug("Call postData", projectData);
+      log.debug("Client/app.js/getStarted -> Call postData", projectData);
 
       //Send URL to /getSentiment Server enpoint
       //Return will be an json Object
       const data = await postData("/getSentiment", projectData);
 
-      log.debug("Data returned from postDAta Call:", data);
+      log.debug(
+        "Client/app.js/getStarted -> Data returned from postDAta Call:",
+        data
+      );
 
       //Update UI with result from server response
       updateUI(data);
@@ -41,7 +44,10 @@ const getStarted = async event => {
       alert("Please enter a valid URL");
     }
   } catch (err) {
-    log.debug("ERROR in Client Side - getStarted", error);
+    log.debug(
+      "Client/app.js/getStarted -> ERROR in Client Side - getStarted",
+      error
+    );
   }
 };
 
@@ -53,8 +59,8 @@ el.addEventListener("click", getStarted); */
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
   try {
-    log.debug(`CALLED -> postData on URL: ${url}`);
-    log.debug(`With Data Object -> `, data);
+    log.debug(`Client/app.js/postData -> CALLED -> postData on URL: ${url}`);
+    log.debug(`Client/app.js/postData -> With Data Object -> `, data);
 
     const response = await fetch(url, {
       method: "POST",
@@ -67,23 +73,23 @@ const postData = async (url = "", data = {}) => {
     });
 
     const newData = await response.json();
-    log.debug("CLIENT -> POST Data Route RESPONSE", newData);
+    log.debug("Client/app.js/postData ->  POST Data Route RESPONSE", newData);
     return newData;
   } catch (error) {
-    log.debug("ERROR in Client Side postData", error);
+    log.debug("Client/app.js/postData -> ERROR in Client Side postData", error);
   }
 };
 
 //Update UI
 const updateUI = async data => {
   try {
-    log.debug(`CALL -> Update UI with data Object`, data);
+    log.debug(`Client/app.js/updateUI ->  Update UI with data Object`, data);
 
     /*   const request = await fetch("/getSentiment");
     const allData = await request.json(); */
     const allData = data;
 
-    log.debug("updateUI -> ", allData);
+    log.debug("Client/app.js/updateUI -> Data: ", allData);
     document.getElementById("url").innerHTML = `URL: ${allData.url}`;
     document.getElementById("pol").innerHTML = `Polarity: ${allData.polarity}`;
     document.getElementById(
@@ -91,7 +97,7 @@ const updateUI = async data => {
     ).innerHTML = `Confidence: ${allData.confidence}`;
     document.getElementById("restxt").innerHTML = `TEXT: ${allData.text}`;
   } catch (error) {
-    log.debug("ERROR in Client Side updateUI", error);
+    log.debug("Client/app.js/updateUI -> ERROR in Client Side updateUI", error);
   }
 };
 
