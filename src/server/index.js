@@ -37,6 +37,9 @@ let projectData = {};
 let data = [];
 
 //Setup Express Server
+const distPath = path.join(__dirname, "..//..//dist");
+logger.debug(`Server/index.js -> DIST Folder Path: `, distPath);
+
 const app = express();
 app.use(cors());
 // to use json
@@ -49,10 +52,11 @@ app.use(
 );
 
 //Set directory for production
-app.use(express.static("dist"));
+app.use(express.static(distPath));
 
+logger.debug(`Server/index.js -> Index.html Path: `, `${distPath}/index.html`);
 app.get("/", function(req, res) {
-  res.sendFile("dist/index.html");
+  res.sendFile(`${distPath}/index.html`);
 });
 
 let port = 8000;
