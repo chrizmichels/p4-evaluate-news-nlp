@@ -41,10 +41,10 @@ const getStarted = async event => {
   }
 };
 
-// Event listener to add function to existing HTML DOM element
+/* // Event listener to add function to existing HTML DOM element
 const el = document.getElementById("generate");
 log.debug(`Add Event Listener to -> `, el);
-el.addEventListener("click", getStarted);
+el.addEventListener("click", getStarted); */
 
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
